@@ -26,10 +26,8 @@ const configService = new ConfigService();
 
 @Module({
     imports: [
-        ConfigModule.forRoot({
-            load: [configVar],
-        }),
-        MongooseModule.forRoot('mongodb+srv://root:admin@cluster0-jim6x.mongodb.net/test?retryWrites=true&w=majority', {
+        ConfigModule.forRoot(),
+        MongooseModule.forRoot( process.env.MONGODB_CNN, {
             useNewUrlParser: true,
         }),
         MulterModule.register({
@@ -67,7 +65,8 @@ export class AppModule {
     }
 
     constructor(private readonly configService: ConfigService) {
-        AppModule.port = this.configService.get(Configuration.PORT);
+        AppModule.port = process.env.PORT;
+        console.log(process.env.MONGODB_CNN);
         const logger = new Logger(AppModule.name);
         logger.log(
             `REST: ${this.configService.get(
